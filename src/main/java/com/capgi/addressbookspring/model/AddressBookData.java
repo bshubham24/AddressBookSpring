@@ -1,10 +1,20 @@
 package com.capgi.addressbookspring.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.capgi.addressbookspring.dto.AddressBookDTO;
 
 import lombok.Data;
 
+@Entity
+@Table(name = "addressBook_data")
 public @Data class AddressBookData {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String firstName;
 	private String lastName;
@@ -15,8 +25,11 @@ public @Data class AddressBookData {
 	private String phoneNo;
 	private String email;
 
-	public AddressBookData(long id, AddressBookDTO addressBookDTO) {
-		this.id = id;
+	public AddressBookData() {
+
+	}
+
+	public AddressBookData(AddressBookDTO addressBookDTO) {
 		this.firstName = addressBookDTO.getFirstName();
 		this.lastName = addressBookDTO.getLastName();
 		this.address = addressBookDTO.getAddress();

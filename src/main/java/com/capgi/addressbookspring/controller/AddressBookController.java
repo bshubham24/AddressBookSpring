@@ -32,7 +32,7 @@ public class AddressBookController {
 	private IAddressBookService addressBookService;
 
 	@RequestMapping(value = { "", "/", "/get" })
-	public ResponseEntity<ResponseDTO> getAddressBookData() throws PersonNotFoundException {
+	public ResponseEntity<ResponseDTO> getAddressBookData() {
 		List<AddressBookData> addressBook = addressBookService.getAddressBookData();
 		ResponseDTO responseDTO = new ResponseDTO("Get Call Success", addressBook);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);

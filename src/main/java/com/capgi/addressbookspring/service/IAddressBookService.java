@@ -7,7 +7,7 @@ import com.capgi.addressbookspring.exception.PersonNotFoundException;
 import com.capgi.addressbookspring.model.AddressBookData;
 
 public interface IAddressBookService {
-	List<AddressBookData> getAddressBookData() throws PersonNotFoundException;
+	List<AddressBookData> getAddressBookData();
 
 	AddressBookData getAddressBookDataById(long id) throws PersonNotFoundException;
 
