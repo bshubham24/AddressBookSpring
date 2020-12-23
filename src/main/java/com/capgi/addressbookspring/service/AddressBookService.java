@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.capgi.addressbookspring.dto.AddressBookDTO;
+import com.capgi.addressbookspring.exception.PersonNotFoundException;
 import com.capgi.addressbookspring.model.AddressBookData;
 
 @Service
@@ -15,18 +16,23 @@ public class AddressBookService implements IAddressBookService {
 	List<AddressBookData> addressBook = new ArrayList<>();
 
 	@Override
-	public List<AddressBookData> getAddressBookData() {
-		return addressBook;
+	public List<AddressBookData> getAddressBookData() throws PersonNotFoundException {
+		if (addressBook.isEmpty()) {
+			throw new PersonNotFoundException("address book is empty!");
+		} else
+			return addressBook;
 	}
 
 	@Override
-	public AddressBookData getAddressBookDataById(long id) {
+	public AddressBookData getAddressBookDataById(long id) throws PersonNotFoundException {
 		if (addressBook.size() != 0) {
 			for (AddressBookData data : addressBook) {
 				if (data.getId() == id) {
 					addressBookData = data;
 				}
 			}
+		} else {
+			throw new PersonNotFoundException("Person with the given Id not found!");
 		}
 		return addressBookData;
 	}
@@ -44,7 +50,8 @@ public class AddressBookService implements IAddressBookService {
 	}
 
 	@Override
-	public AddressBookData updateAddressBookData(long id, AddressBookDTO addressBookDTO) {
+	public AddressBookData updateAddressBookData(long id, AddressBookDTO addressBookDTO)
+			throws PersonNotFoundException {
 		addressBookData = getAddressBookDataById(id);
 		if (addressBook.get((int) id) != null) {
 			addressBookData.setFirstName(addressBookDTO.getFirstName());
@@ -54,14 +61,18 @@ public class AddressBookService implements IAddressBookService {
 			addressBookData.setState(addressBookDTO.getState());
 			addressBookData.setPhoneNo(addressBookDTO.getPhoneNo());
 			addressBookData.setEmail(addressBookDTO.getEmail());
-		}
-		return addressBookData;
+
+			return addressBookData;
+		} else
+			throw new PersonNotFoundException("Person with given Id not found!");
 	}
 
 	@Override
-	public void deleteAddressBookDataById(long id) {
-		addressBook.remove((int) id - 1);
+	public void deleteAddressBookDataById(long id) throws PersonNotFoundException {
+		if (addressBook.get((int) id) == null) {
+			throw new PersonNotFoundException("Person with given Id not found!");
+		} else
+			addressBook.remove((int) id - 1);
 
 	}
-
 }
