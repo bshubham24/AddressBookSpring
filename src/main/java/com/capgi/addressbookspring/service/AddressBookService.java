@@ -1,78 +1,86 @@
 package com.capgi.addressbookspring.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgi.addressbookspring.dto.AddressBookDTO;
 import com.capgi.addressbookspring.exception.PersonNotFoundException;
 import com.capgi.addressbookspring.model.AddressBookData;
+import com.capgi.addressbookspring.repository.AddressBookRepository;
 
 @Service
 public class AddressBookService implements IAddressBookService {
 
 	AddressBookData addressBookData = null;
-	List<AddressBookData> addressBook = new ArrayList<>();
+
+	@Autowired
+	private AddressBookRepository addressBookRepository;
 
 	@Override
-	public List<AddressBookData> getAddressBookData() throws PersonNotFoundException {
-		if (addressBook.isEmpty()) {
-			throw new PersonNotFoundException("address book is empty!");
-		} else
-			return addressBook;
+	public List<AddressBookData> getAddressBookData() {
+		return addressBookRepository.findAll().stream().collect(Collectors.toList());
 	}
 
 	@Override
 	public AddressBookData getAddressBookDataById(long id) throws PersonNotFoundException {
-		if (addressBook.size() != 0) {
-			for (AddressBookData data : addressBook) {
-				if (data.getId() == id) {
-					addressBookData = data;
-				}
-			}
-		} else {
-			throw new PersonNotFoundException("Person with the given Id not found!");
-		}
-		return addressBookData;
+		return addressBookRepository.findById(id)
+				.orElseThrow(() -> new PersonNotFoundException("Person with given id is not present"));
 	}
 
 	@Override
 	public AddressBookData createAddressBookData(AddressBookDTO addressBookDTO) {
-		if (addressBook == null) {
-			addressBookData = new AddressBookData(1, addressBookDTO);
-		} else {
-			addressBookData = new AddressBookData(addressBook.size() + 1, addressBookDTO);
-
-		}
-		addressBook.add(addressBookData);
+		AddressBookData addressBookData = new AddressBookData(addressBookDTO);
+		addressBookRepository.save(addressBookData);
 		return addressBookData;
 	}
 
 	@Override
 	public AddressBookData updateAddressBookData(long id, AddressBookDTO addressBookDTO)
 			throws PersonNotFoundException {
-		addressBookData = getAddressBookDataById(id);
-		if (addressBook.get((int) id) != null) {
-			addressBookData.setFirstName(addressBookDTO.getFirstName());
-			addressBookData.setLastName(addressBookDTO.getLastName());
-			addressBookData.setAddress(addressBookDTO.getAddress());
-			addressBookData.setCity(addressBookDTO.getCity());
-			addressBookData.setState(addressBookDTO.getState());
-			addressBookData.setPhoneNo(addressBookDTO.getPhoneNo());
-			addressBookData.setEmail(addressBookDTO.getEmail());
-
+		AddressBookData addressBookData = addressBookRepository.findById(id).get();
+		if (addressBookData != null && addressBookData.getId() == id) {
+			if (Objects.nonNull(addressBookDTO.getFirstName())) {
+				addressBookData.setFirstName(addressBookDTO.getFirstName());
+			}
+			if (Objects.nonNull(addressBookDTO.getLastName())) {
+				addressBookData.setLastName(addressBookDTO.getLastName());
+			}
+			if (Objects.nonNull(addressBookDTO.getAddress())) {
+				addressBookData.setAddress(addressBookDTO.getAddress());
+			}
+			if (Objects.nonNull(addressBookDTO.getCity())) {
+				addressBookData.setCity(addressBookDTO.getCity());
+			}
+			if (Objects.nonNull(addressBookDTO.getState())) {
+				addressBookData.setState(addressBookDTO.getState());
+			}
+			if (Objects.nonNull(addressBookDTO.getZip())) {
+				addressBookData.setZip(addressBookDTO.getZip());
+			}
+			if (Objects.nonNull(addressBookDTO.getPhoneNo())) {
+				addressBookData.setPhoneNo(addressBookDTO.getPhoneNo());
+			}
+			if (Objects.nonNull(addressBookDTO.getEmail())) {
+				addressBookData.setEmail(addressBookDTO.getEmail());
+			}
+			addressBookRepository.save(addressBookData);
 			return addressBookData;
-		} else
-			throw new PersonNotFoundException("Person with given Id not found!");
+		} else {
+			throw new PersonNotFoundException("Person with given id is not present!");
+		}
 	}
 
 	@Override
 	public void deleteAddressBookDataById(long id) throws PersonNotFoundException {
-		if (addressBook.get((int) id) == null) {
-			throw new PersonNotFoundException("Person with given Id not found!");
-		} else
-			addressBook.remove((int) id - 1);
-
+		AddressBookData addressBookData = addressBookRepository.findById(id).get();
+		if (addressBookData.getFirstName() != null) {
+			addressBookRepository.deleteById(id);
+		} else {
+			throw new PersonNotFoundException("Employee not found!!!");
+		}
 	}
 }

@@ -10,4 +10,8 @@ public @Data class ResponseDTO {
 		this.message = string;
 		this.data = data;
 	}
+
+	public ResponseDTO(String string) {
+		this.message = string;
+	}
 }

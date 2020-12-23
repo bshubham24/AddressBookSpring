@@ -1,6 +1,7 @@
 package com.capgi.addressbookspring.exception;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,16 @@ public class AddressBookException {
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(NoSuchElementException.class)
+	public ResponseEntity<ResponseDTO> handleNoSuchElementException(NoSuchElementException exception) {
+		ResponseDTO responseDTO = new ResponseDTO("Person doesn't exit!");
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(PersonNotFoundException.class)
 	public ResponseEntity<ResponseDTO> handleEmployeeNotFoundException(PersonNotFoundException exception) {
 		ResponseDTO responseDTO = new ResponseDTO("Exception while processing REST Request", exception.getMessage());
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
 	}
+
 }
