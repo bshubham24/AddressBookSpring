@@ -3,12 +3,15 @@ package com.capgi.addressbookspring;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootApplication
+@Slf4j
 public class AddressBookSpringApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AddressBookSpringApplication.class, args);
-		System.out.println("Welcome to the address book");
+		log.info("Welcome to the address book");
 	}
 
 }
