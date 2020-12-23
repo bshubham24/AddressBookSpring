@@ -2,6 +2,8 @@ package com.capgi.addressbookspring.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +45,7 @@ public class AddressBookController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ResponseDTO> addAddressBookData(@RequestBody AddressBookDTO addressBookDTO) {
+	public ResponseEntity<ResponseDTO> addAddressBookData(@Valid @RequestBody AddressBookDTO addressBookDTO) {
 		addressBookData = addressBookService.createAddressBookData(addressBookDTO);
 		ResponseDTO responseDTO = new ResponseDTO("Created Entry for: ", addressBookData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
@@ -51,7 +53,7 @@ public class AddressBookController {
 
 	@PutMapping("/update/{Id}")
 	public ResponseEntity<ResponseDTO> updateAddressBookData(@PathVariable("Id") long Id,
-			@RequestBody AddressBookDTO addressBookDTO) {
+			@Valid @RequestBody AddressBookDTO addressBookDTO) {
 		addressBookData = addressBookService.updateAddressBookData(Id, addressBookDTO);
 		ResponseDTO responseDTO = new ResponseDTO("Updated Entry for id: " + Id, addressBookData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
