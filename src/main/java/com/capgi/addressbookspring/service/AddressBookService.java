@@ -43,11 +43,8 @@ public class AddressBookService implements IAddressBookService {
 			throws PersonNotFoundException {
 		AddressBookData addressBookData = addressBookRepository.findById(id).get();
 		if (addressBookData != null && addressBookData.getId() == id) {
-			if (Objects.nonNull(addressBookDTO.getFirstName())) {
-				addressBookData.setFirstName(addressBookDTO.getFirstName());
-			}
-			if (Objects.nonNull(addressBookDTO.getLastName())) {
-				addressBookData.setLastName(addressBookDTO.getLastName());
+			if (Objects.nonNull(addressBookDTO.getFullName())) {
+				addressBookData.setFullName(addressBookDTO.getFullName());
 			}
 			if (Objects.nonNull(addressBookDTO.getAddress())) {
 				addressBookData.setAddress(addressBookDTO.getAddress());
@@ -64,9 +61,6 @@ public class AddressBookService implements IAddressBookService {
 			if (Objects.nonNull(addressBookDTO.getPhoneNo())) {
 				addressBookData.setPhoneNo(addressBookDTO.getPhoneNo());
 			}
-			if (Objects.nonNull(addressBookDTO.getEmail())) {
-				addressBookData.setEmail(addressBookDTO.getEmail());
-			}
 			addressBookRepository.save(addressBookData);
 			return addressBookData;
 		} else {
@@ -77,7 +71,7 @@ public class AddressBookService implements IAddressBookService {
 	@Override
 	public void deleteAddressBookDataById(long id) throws PersonNotFoundException {
 		AddressBookData addressBookData = addressBookRepository.findById(id).get();
-		if (addressBookData.getFirstName() != null) {
+		if (addressBookData.getFullName() != null) {
 			addressBookRepository.deleteById(id);
 		} else {
 			throw new PersonNotFoundException("Employee not found!!!");

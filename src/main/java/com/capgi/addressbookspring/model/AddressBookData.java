@@ -16,28 +16,24 @@ public @Data class AddressBookData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	private String firstName;
-	private String lastName;
+	private String fullName;
 	private String address;
 	private String city;
 	private String state;
 	private String zip;
 	private String phoneNo;
-	private String email;
 
 	public AddressBookData() {
 
 	}
 
 	public AddressBookData(AddressBookDTO addressBookDTO) {
-		this.firstName = addressBookDTO.getFirstName();
-		this.lastName = addressBookDTO.getLastName();
+		this.fullName = addressBookDTO.getFullName();
 		this.address = addressBookDTO.getAddress();
 		this.state = addressBookDTO.getState();
 		this.city = addressBookDTO.getCity();
 		this.zip = addressBookDTO.getZip();
 		this.phoneNo = addressBookDTO.getPhoneNo();
-		this.email = addressBookDTO.getEmail();
 	}
 
 }
